@@ -7,7 +7,6 @@ app = Flask(__name__)
 def index():
     return send_file('index.html')
 
-if __name__ == '__main__':
     app.run()
 
 # keepalive.py
@@ -16,5 +15,10 @@ import time
 import random
 
 while True:
-    requests.get(f'https://your-render-app.onrender.com/?rand={random.randint(1000,9999)}')
+    requests.get(f'https://investgition.onrender.com/?rand={random.randint(1000,9999)}')
     time.sleep(300)
+
+    
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
