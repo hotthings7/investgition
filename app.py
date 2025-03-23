@@ -35,18 +35,6 @@ if __name__ == "__main__":
         thread = threading.Thread(target=keepalive)
         thread.daemon = True
         thread.start()
-    import requests
-import time
-
-while True:
-    try:
-        # Replace with your actual Render URL
-        requests.get("https://investgition.onrender.com/ping")
-        print("External keepalive ping sent")
-    except Exception as e:
-        print(f"External ping failed: {e}")
-    
-    time.sleep(300)  # 5 minutes
     
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
