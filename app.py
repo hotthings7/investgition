@@ -9,8 +9,7 @@ app = Flask(__name__)
 # Serve HTML files from static folder
 @app.route('/')
 def serve_index():
-    return send_from_directory('index.html')
-
+    return send_from_directory(os.getcwd(), 'index.html')
 # Keepalive endpoint
 @app.route('/ping')
 def ping():
